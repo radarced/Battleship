@@ -1,0 +1,12 @@
+so the game will consist of two menus :
+game menu
+game running Menu.
+
+imprecise names but theyre distinct so just go along with it .
+
+i am going to try and work with images in this project .
+and the images intergration mechanism specification are going to be dealt with their own file .
+every ship is going to be an image and in the game editor menu and in the game menu
+i have to figure out how to align a ship on the grid based upon a set of grid cells that 
+the image / ship needs to be on and set the ship's size accordingly as well .
+

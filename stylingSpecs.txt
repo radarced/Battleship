@@ -1,0 +1,19 @@
+the styling of the ships are going to be done mainly based upon these properties :
+- opaqueness 
+- visiblity ( i hope this is the property which makes an element invisible while not removing it 
+from the DOM )
+- position absolute 
+- width   | - > these two are going to be defined by the grid cells of the board or just
+be its own dimensions if its inside the shipsToBePlaced container .
+- height  | - ^  
+
+problems i have :
+- no solid reference mechanism to position the ships inside the grid .
+- ^ same thing but with the actual game grid .
+
+ill just start by making micro experiments for the grid ships styling and functionaltiy .
+then ill move on to the shipsToBePlaced container styling and functionality and combine
+them move them into the main branch after i have demystified them .
+
+ill create the two branches work on them and then merge them into main and delete them afterwards .
+this is the workflow ill be using .
