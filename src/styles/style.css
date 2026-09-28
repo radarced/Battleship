@@ -1,0 +1,21 @@
+*
+{
+    box-sizing: border-box;
+    margin : 0;
+    padding : 0;
+}
+
+body
+{
+    min-height: 100vh;
+}
+
+.mainContainer
+{
+    min-height : 100vh; /* i hope this doesnt break the styling when mainContainers height exceeds the body's height i assume itll also scale along with the mainContainer*/
+    background-color: grey;
+    display : flex;
+    flex-flow : row nowrap;
+    justify-content: center;
+    align-items: center;
+}

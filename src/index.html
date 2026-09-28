@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BattleShip</title>
+    <link rel="stylesheet" href="./styles/style.css" />
+  </head>
+  <body>
+    <div class="mainContainer">
+      <div class="sTBwrapper">
+        <button class="rotate" id="sTB1Rotate" data-board="1">
+          Rotate Ships
+        </button>
+        <div class="shipsToBePlaced" id="sTBP1" data-board="1"></div>
+      </div>
+      <!-- player 1's ^ toBePlacedShips container -->
+      <div class="boardWrapper">
+        <div class="computerOrPlayer">
+          <button class="playerChooseBtn" data-player="1" data-choose="player">
+            Player
+          </button>
+          <button
+            class="playerChooseBtn"
+            data-player="1"
+            data-choose="computer"
+          >
+            Computer
+          </button>
+        </div>
+        <div class="board1"></div>
+      </div>
+      <button class="play">Play</button>
+      <div class="boardWrapper">
+        <div class="computerOrPlayer">
+          <button class="playerChooseBtn" data-player="1" data-choose="player">
+            Player
+          </button>
+          <button
+            class="playerChooseBtn"
+            data-player="1"
+            data-choose="computer"
+          >
+            Computer
+          </button>
+        </div>
+        <div class="board2"></div>
+      </div>
+      <div class="sTBwrapper">
+        <button class="rotate" id="sTB2Rotate" data-board="2">
+          Rotate Ships
+        </button>
+        <div class="shipsToBePlaced" id="sTBP2" data-board="2"></div>
+        <!-- player 2's ^ toBePlacedShips container -->
+      </div>
+    </div>
+    <script src="main.js" type="module"></script>
+  </body>
+</html>

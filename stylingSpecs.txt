@@ -16,4 +16,4 @@ then ill move on to the shipsToBePlaced container styling and functionality and 
 them move them into the main branch after i have demystified them .
 
 ill create the two branches work on them and then merge them into main and delete them afterwards .
-this is the workflow ill be using .
+this is the workflow ill be using ; temporary branches workflow ?? idk ?.
