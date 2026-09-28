@@ -1,0 +1,4 @@
+the shipsContainer element should be vertical for 
+the default ship dimensions ( meaning no rotation transformation )
+and horizantal for 90 degree transformations .
+^^ styling .

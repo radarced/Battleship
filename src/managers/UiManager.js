@@ -10,8 +10,8 @@ const GRID_SIZE = 10; // its always going to be a 10x10 board.
 
 let UiManager = (() => {
   let elementReferences = {
-    menuBoard1: document.querySelector(".board1"),
-    menuBoard2: document.querySelector(".board2"),
+    menuBoard1: document.querySelector("#menuBoard1"),
+    menuBoard2: document.querySelector("#menuBoard2"),
     menuShipsContainer1: document.querySelector("#sTBP1"),
     menuShipsContainer2: document.querySelector("#sTBP2"),
   };
@@ -47,7 +47,21 @@ let UiManager = (() => {
     }
   }
 
-  function populateMenuGrid(grid) {}
+  function populateMenuGrid(grid) {
+    for (let i = 0; i < GRID_SIZE; i++) {
+      let row = document.createElement("div");
+      row.className = "row";
+
+      for (let j = 0; j < GRID_SIZE; j++) {
+        let cell = document.createElement("div");
+        cell.className = "cell water";
+        cell.dataset.row = i;
+        cell.dataset.col = j;
+        row.appendChild(cell);
+      }
+      grid.appendChild(row);
+    }
+  }
 
   function populateShipsContainer(El_shipsCtr) {
     // this function just creates all the ships inside the ship container

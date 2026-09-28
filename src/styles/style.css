@@ -5,17 +5,139 @@
     padding : 0;
 }
 
+:root
+{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 body
 {
     min-height: 100vh;
+    display: flex;
+    flex-flow : column nowrap;
+    background-color: grey;
+}
+
+h1
+{
+    text-align: center;
+    margin : 0.4rem;
 }
 
 .mainContainer
 {
+    width : 100%;
+    height: 100%;
     min-height : 100vh; /* i hope this doesnt break the styling when mainContainers height exceeds the body's height i assume itll also scale along with the mainContainer*/
     background-color: grey;
     display : flex;
-    flex-flow : row nowrap;
+    flex-flow : row wrap;
     justify-content: center;
     align-items: center;
+    gap : 12px;
+    overflow : auto;
+}
+
+.sTBwrapper
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap : 6px;
+}
+
+.shipsToBePlaced
+{
+    display : flex;
+    background-color: rgba(211, 211, 211, 0.478);
+    padding : 0.3rem;
+    border-radius: 5px;
+    flex-wrap : wrap;
+    flex : 1 1 425px;
+    height : auto;
+    max-height: 425px;
+}
+
+.shipsToBePlaced.horizantal
+{
+    flex-direction: row;
+}
+
+.shipsToBePlaced.vertical
+{
+    flex-direction: column;
+}
+
+.boardWrapper
+{
+    display: flex;
+    flex : 1 1 250px;
+    max-width: 425px;
+    padding : 0.2rem;
+    flex-flow : column nowrap;
+}
+
+.computerOrPlayer
+{
+    align-self: center;
+}
+/* the children of boardWrapper decide the sizing for it  */
+.board
+{
+    min-width: 0;
+    flex : 1 1 0; /* it can grow*/
+    display: flex;
+    flex-flow : column nowrap;
+}
+
+.row
+{
+    min-width: 0;
+    flex : 1 1 100%;
+    display: flex;
+    flex-flow : row nowrap;
+}
+
+.cell
+{
+    flex : 1 1 100%;
+    border : 1px solid grey;
+    background-color: rgb(199, 198, 198);
+    aspect-ratio: 1/1;
+}
+
+.cell.water
+{
+    background-color: rgba(0, 255, 255, 0.759);
+}
+
+.maxParentSizeWrapper
+{
+    flex : 1 1 100%;
+    width : 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.play
+{
+    background-color : whitesmoke;
+    color : black;
+    font-size: 1.3rem;
+    padding : 0.5rem;
+    border-radius : 5px;
+}
+
+.rotate,.playerChooseBtn
+{
+    font-size : 1rem;
+    padding : 0.3rem;
+    background-color: whitesmoke;
+    border-radius : 5px;
+}
+
+.playerChooseBtn.chosen 
+{
+    background-color: grey;
+    color : whitesmoke;
 }
