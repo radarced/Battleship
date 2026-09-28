@@ -10,41 +10,25 @@ const GRID_SIZE = 10; // its always going to be a 10x10 board.
 
 let UiManager = (() => {
   let elementReferences = {
+    mainCtr: document.querySelector(".mainContainer"),
     menuBoard1: document.querySelector("#menuBoard1"),
     menuBoard2: document.querySelector("#menuBoard2"),
     menuShipsContainer1: document.querySelector("#sTBP1"),
     menuShipsContainer2: document.querySelector("#sTBP2"),
   };
-  // the space complexity is alot more as compared to the canvas but i dont think its worth it to adopt the canvas method
-  // alongside typical DOM functionality cuz maintainability and context switch hell .
 
-  let player1ShipsContainer = []; // the container in memory not DOM related
-  let player2ShipsContainer = [];
-  let shipsOnMenuBoard1Ctr = [];
-  let shipsOnMenuBoard2Ctr = [];
-
-  // axiom : the dynamic images / ships are the only ones
-  // whose states and memory needs to be deliberately held and dealt with in code .
-
-  function InitialLoad() {
-    // populate the toBePlacedShipContainers
-    // populate the grids
-    createShips(); // populates the shipImages array
-
-    populateShipsContainer(elementReferences.menuShipsContainer1);
-    populateShipsContainer(elementReferences.menuShipsContainer2);
+  function InitialLoad(shipsContainer1, shipsContainer2) {
+    populateShipsContainer(
+      elementReferences.menuShipsContainer1,
+      shipsContainer1,
+    );
+    populateShipsContainer(
+      elementReferences.menuShipsContainer2,
+      shipsContainer2,
+    );
 
     populateMenuGrid(elementReferences.menuBoard1);
     populateMenuGrid(elementReferences.menuBoard2);
-  }
-
-  function createShips() {
-    for (let i = 1; i <= 5; i++) {
-      let ship1 = new Ship(i);
-      let ship2 = new Ship(i);
-      player1ShipsContainer.push(ship1);
-      player2ShipsContainer.push(ship2);
-    }
   }
 
   function populateMenuGrid(grid) {
@@ -63,25 +47,21 @@ let UiManager = (() => {
     }
   }
 
-  function populateShipsContainer(El_shipsCtr) {
+  function populateShipsContainer(El_shipsCtr, shipsCtr) {
     // this function just creates all the ships inside the ship container
-    // ill think and take care of the state functionality and its rendering later .
-
-    let boardNum = +El_shipsCtr.dataset.board; // represents whose board it is
-    let shipsCtr;
-    if (boardNum === 1) {
-      shipsCtr = player1ShipsContainer;
-    } else if (boardNum === 2) {
-      shipsCtr = player2ShipsContainer;
-    }
 
     for (let i = 0; i < shipsCtr.length; i++) {
       let ship = shipsCtr[i];
       El_shipsCtr.appendChild(ship.img);
     }
   }
+  // getters
 
-  return { InitialLoad };
+  function getDomRefs() {
+    return elementReferences;
+  }
+
+  return { InitialLoad, getDomRefs };
 })();
 
 export default UiManager;

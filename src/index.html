@@ -8,12 +8,12 @@
   </head>
   <body>
     <h1>BattleShip!</h1>
-    <div class="mainContainer" data-gameState="menu">
+    <div class="editorMenu mainContainer" data-gameState="menu">
       <div class="sTBwrapper">
         <button class="rotate" id="sTB1Rotate" data-board="1">
           Rotate Ships
         </button>
-        <div class="shipsToBePlaced vertical" id="sTBP1" data-board="1"></div>
+        <div class="shipsToBePlaced horizantal" id="sTBP1" data-board="1"></div>
       </div>
       <!-- player 1's ^ toBePlacedShips container -->
       <div class="boardWrapper">
@@ -29,7 +29,7 @@
             Computer
           </button>
         </div>
-        <div class="board" id="menuBoard1"></div>
+        <div class="menuBoard board" id="menuBoard1"></div>
       </div>
       <div class="maxParentSizeWrapper">
         <button class="play">Play</button>
@@ -39,7 +39,7 @@
         <button class="rotate" id="sTB2Rotate" data-board="2">
           Rotate Ships
         </button>
-        <div class="shipsToBePlaced vertical" id="sTBP2" data-board="2"></div>
+        <div class="shipsToBePlaced horizantal" id="sTBP2" data-board="2"></div>
         <!-- player 2's ^ toBePlacedShips container -->
       </div>
       <div class="boardWrapper">
@@ -55,7 +55,7 @@
             Computer
           </button>
         </div>
-        <div class="board" id="menuBoard2"></div>
+        <div class="menuBoard board" id="menuBoard2"></div>
       </div>
     </div>
     <script src="main.js" type="module"></script>
