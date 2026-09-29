@@ -4,7 +4,6 @@
 // to the accessing , populating , deleting the elements from DOM.
 // tldr ; ^ this manager will hold the references to the ship images and deal with
 // them minus the rendering .
-import Ship from "../modules/Ship.js";
 
 const GRID_SIZE = 10; // its always going to be a 10x10 board.
 
@@ -53,6 +52,7 @@ let UiManager = (() => {
     for (let i = 0; i < shipsCtr.length; i++) {
       let ship = shipsCtr[i];
       El_shipsCtr.appendChild(ship.img);
+      ship.img.className = "shipToBePlaced";
     }
   }
   // getters
@@ -61,7 +61,41 @@ let UiManager = (() => {
     return elementReferences;
   }
 
-  return { InitialLoad, getDomRefs };
+  // this function would only be called if there are actual ships inside the container
+  function getShipToBePlaced(shipData) {
+    let shipCtrKey = "menuShipsContainer" + shipData.player;
+    let shipCtrChildren = elementReferences[shipCtrKey].children;
+    // loop through them and find the one with the correct level
+    for (let i = 0; i < shipCtrChildren.length; i++) {
+      let shipEL = shipCtrChildren[i];
+      let shipLevel = +shipEL.dataset.level; // the unary + operator to convert the string into number
+      if (shipLevel === shipData.level) {
+        return shipEL;
+      }
+    }
+  }
+
+  function getMenuBoard(boardNum) {
+    let boardKey = "menuBoard" + boardNum;
+    return elementReferences[boardKey];
+  }
+
+  // cuz arrays are O(1) access this is fast yes really vague and non necessary but whatever
+  function getCell(board, col, row) {
+    let children = board.children;
+    return children[row].children[col]; // cuz they are ordered in that same manner
+  }
+
+  function getBoardShip(shipData) {}
+
+  return {
+    InitialLoad,
+    getDomRefs,
+    getBoardShip,
+    getShipToBePlaced,
+    getMenuBoard,
+    getCell,
+  };
 })();
 
 export default UiManager;

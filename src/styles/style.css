@@ -117,6 +117,15 @@ h1
     background-color: rgba(0, 255, 255, 0.759);
 }
 
+.cell.water.black
+{
+    background-color: rgba(0, 0, 0, 0.383);
+}
+
+.cell.water.red
+{
+    background-color: red;
+}
 .maxParentSizeWrapper
 {
     flex : 1 1 100%;
@@ -146,4 +155,9 @@ h1
 {
     background-color: grey;
     color : whitesmoke;
+}
+
+.clicked
+{
+    border : 5px solid black;
 }

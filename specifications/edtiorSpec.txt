@@ -2,3 +2,21 @@ the shipsContainer element should be vertical for
 the default ship dimensions ( meaning no rotation transformation )
 and horizantal for 90 degree transformations .
 ^^ styling .
+
+the different types of clickable boats classes are going to be boardShip 
+and shipToBePlaced.
+
+for the ship editor functionality this is the foundational axiom :
+both the state and rendering are in sync at all times .
+
+when a ship inside the ships container is clicked :
+- if its the last clicked ship then the lastClicked variable becomes null 
+and now the user is holding basically nothing .
+- if its a new ship or if nothing else was clicked before then lastClicked
+becomes that .
+
+in either of the case in the rendering we will toggle the classes of "clicked" on the
+ship .
+
+in terms of rendering :
+- we have to first set the old lastClicked el back to normal in the case where a new ship was clicked .

@@ -1,10 +1,14 @@
 import UiManager from "./UiManager.js";
-import { mainCtrClickHandler } from "../Handlers/mainCtrHandlers.js";
+import {
+  mainCtrClickHandler,
+  mainCtrMouseMoveHandler,
+} from "../Handlers/mainCtrHandlers.js";
 
 let EventManager = (() => {
   function attachInitialHandlers() {
     let domRefs = UiManager.getDomRefs();
     domRefs.mainCtr.addEventListener("click", mainCtrClickHandler);
+    domRefs.mainCtr.addEventListener("mousemove", mainCtrMouseMoveHandler);
   }
 
   // using an intermediary class
