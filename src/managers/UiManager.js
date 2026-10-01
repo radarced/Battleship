@@ -28,6 +28,16 @@ let UiManager = (() => {
 
     populateMenuGrid(elementReferences.menuBoard1);
     populateMenuGrid(elementReferences.menuBoard2);
+
+    // adding boardShipsContainer on both boards.
+    // i dont give a shit about refactoring this part just know that everything below is just
+    // adding a boardShipsCtr(div) to the end of the menuBoards.
+    let boardShipsCtr1 = document.createElement("div");
+    boardShipsCtr1.className = "boardShipsCtr";
+    elementReferences.menuBoard1.appendChild(boardShipsCtr1);
+    let boardShipsCtr2 = document.createElement("div");
+    boardShipsCtr2.className = "boardShipsCtr";
+    elementReferences.menuBoard2.appendChild(boardShipsCtr2);
   }
 
   function populateMenuGrid(grid) {
@@ -75,6 +85,12 @@ let UiManager = (() => {
     }
   }
 
+  function getBoardShipsCtr(boardNum) {
+    let menuBoard = getMenuBoard(boardNum);
+    const BOARD_SHIPS_CTR_INDEX = 10;
+    return menuBoard.children[BOARD_SHIPS_CTR_INDEX];
+  }
+
   function getMenuBoard(boardNum) {
     let boardKey = "menuBoard" + boardNum;
     return elementReferences[boardKey];
@@ -94,6 +110,7 @@ let UiManager = (() => {
     getBoardShip,
     getShipToBePlaced,
     getMenuBoard,
+    getBoardShipsCtr,
     getCell,
   };
 })();

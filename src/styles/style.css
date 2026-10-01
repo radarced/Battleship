@@ -94,6 +94,7 @@ h1
     flex : 1 1 0; /* it can grow*/
     display: flex;
     flex-flow : column nowrap;
+    position: relative;
 }
 
 .row
@@ -160,4 +161,9 @@ h1
 .clicked
 {
     border : 5px solid black;
+}
+
+.boardShip 
+{
+    position: absolute;
 }

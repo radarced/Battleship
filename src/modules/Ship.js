@@ -12,8 +12,12 @@ function Ship(level, player) {
   this.img.dataset.playerNum = player;
 }
 
-function BoardShip(level, player, start, end) {
-  this.shipRenderData = new Ship(level, player);
+function BoardShip(level, player, start, end, ship = undefined) {
+  if (ship !== undefined) {
+    this.ship = ship;
+  } else {
+    this.ship = new Ship(level, player); // assuming these guys will be passed
+  }
   this.shipPos = new Position(start, end); // this represents the boardShip's position on the board
 }
 

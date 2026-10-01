@@ -1,4 +1,4 @@
-import { SHIP_TO_BE_PLACED } from "../modules/Enums.js";
+import { BOARD_SHIP, SHIP_TO_BE_PLACED } from "../modules/Enums.js";
 import { Ship, BoardShip, Position } from "../modules/Ship.js";
 import { inRange, cosDegrees, sinDegrees } from "../modules/utils.js";
 // this object will also be a singleton (even though technically its purpose doesnt last throughout the entire program )
@@ -37,8 +37,8 @@ let editorManager = (() => {
 
   let player1ShipsContainer = []; // this represents the ships that are in the container which contains the ships that are to be placed on the board .
   let player2ShipsContainer = [];
-  let shipsOnMenuBoard1Ctr = []; // this array would hold shipPosition whose prototype will be the Position object and it basically holds the ships that have been placed on board1 or board2 correspondingly .
-  let shipsOnMenuBoard2Ctr = [];
+  let menuBoardShips1 = []; // this array would hold shipPosition whose prototype will be the Position object and it basically holds the ships that have been placed on board1 or board2 correspondingly .
+  let menuBoardShips2 = [];
 
   let lastClicked = null; // this represents the last clicked ship on any of the elements ( menuBoards and shipContainers )
   // ^ this will need 3 info ( playerNum , type , level )
@@ -69,9 +69,58 @@ let editorManager = (() => {
     }
   }
 
+  // LC = lastClicked;
+  // this function places the lastClicked ship on the given shipPos.
+  // this function's assumptions :
+  // this function assumes that the given shipPos is unique relative to all the other shipPos on that menuBoard
+  // this function assumes that lastClicked is not null and
+  // that the boardShipPos is valid .
+  function placeLC_Board(boardShipPos) {
+    let correspondingShip = getLastClickedCorrespondingShip();
+    let correspondingShipCtr = getLastClickedCorrespondingShips();
+    let correspondingShipIndex = getLastClickedCorrespondingShipIndex();
+
+    correspondingShipCtr.splice(correspondingShipIndex, 1); // remove the corresponing ship relative to last Clicked from the corresponding container.
+    // now add the correspondingShip onto the board in the given pos
+    // hence just push it into the MenuBoard container;
+    let menuBoardCtr = getPlayerBoardShips(lastClicked.player);
+    menuBoardCtr.push(
+      new BoardShip(
+        lastClicked.level,
+        lastClicked.player,
+        boardShipPos.start,
+        boardShipPos.end,
+        correspondingShip, // points to an object with the Ship prototype in both boardShip and shipTObePlace cases
+      ),
+    );
+    lastClicked = null; // because we put the lastClicked on the board.
+  }
+
+  // returns a boolean which represents whether or not the shipPos given intersects
+  // with any of the ships that are already placed on that board
+  function isShipPosTaken(shipPos, boardNum) {
+    let shipCtr = getPlayerBoardShips(boardNum);
+  }
+
   // ship position related functions
   function isShipPosValid(shipPos) {
     return inRange(shipPos.end.x, 0, 9) && inRange(shipPos.end.y, 0, 9);
+  }
+
+  // returns if lastClicked's player is the given parameter
+  // assume that lastClicked is not null
+  function isLastClickedPlayer(playerNum) {
+    return lastClicked.player === playerNum;
+  }
+
+  function getPlayerBoardShips(boardNum) {
+    if (boardNum === PLAYER_1_NUM) {
+      return menuBoardShips1;
+    } else if (boardNum === PLAYER_2_NUM) {
+      return menuBoardShips2;
+    }
+    // there are no other players as of now so accessing beyond that is not allowed.
+    return undefined;
   }
 
   function getPlayerShipsToBePlaced(playerNum) {
@@ -96,12 +145,27 @@ let editorManager = (() => {
     }
   }
 
+  // its redundant but the distinction is that this is alot more concise and i dont care enough to do a find and replace .
+  function getBoardShips(boardNum) {
+    return getPlayerBoardShips(boardNum);
+  }
+
+  function getBoardShip(playerNum, shipLevel) {
+    let boardShips = getPlayerBoardShips(playerNum);
+    for (let boardShip of boardShips) {
+      if (boardShip.ship.level === shipLevel) {
+        return boardShip;
+      }
+    }
+    return; // <- if shipLevel does not match any of the ships in state
+  }
+
   function getLastClicked() {
     return lastClicked;
   }
 
-  // this function would never be called with lastClicked being null but whatever ..
-  function getLastClickedPos(col, row) {
+  // returns the ship's renderData(Ship interface) in the boardShip's case and Ship on ship case.
+  function getLastClickedCorrespondingShip() {
     if (lastClicked === null) {
       return;
     }
@@ -111,7 +175,51 @@ let editorManager = (() => {
         lastClicked.player,
         lastClicked.level,
       );
+    } else if (lastClicked.type === BOARD_SHIP) {
+      let boardShip = getBoardShip(lastClicked.player, lastClicked.level);
+      correspondingShip = boardShip.ship;
     }
+
+    return correspondingShip;
+  }
+  function getLastClickedCorrespondingShipIndex() {
+    if (lastClicked === null) {
+      return;
+    }
+    let correspondingShipCtr = getLastClickedCorrespondingShips();
+    let index;
+    if (lastClicked.type === BOARD_SHIP) {
+      index = correspondingShipCtr.findIndex(
+        (currentShip) => currentShip.ship.level === lastClicked.level,
+      );
+    } else if (lastClicked.type === SHIP_TO_BE_PLACED) {
+      index = correspondingShipCtr.findIndex(
+        (currentShip) => currentShip.level === lastClicked.level,
+      );
+    }
+    return index;
+  }
+
+  // this function returns the container of ships that the lastClicked corresponding ship is inside in.
+  function getLastClickedCorrespondingShips() {
+    if (lastClicked === null) {
+      return;
+    }
+    let correspondingShipCtr;
+    if (lastClicked.type === SHIP_TO_BE_PLACED) {
+      correspondingShipCtr = getPlayerShipsToBePlaced(lastClicked.player);
+    } else if (lastClicked.type === BOARD_SHIP) {
+      correspondingShipCtr = getPlayerBoardShips(lastClicked.player);
+    }
+    return correspondingShipCtr;
+  }
+
+  // this function would never be called with lastClicked being null but whatever ..
+  function getLastClickedPos(col, row) {
+    if (lastClicked === null) {
+      return;
+    }
+    let correspondingShip = getLastClickedCorrespondingShip();
 
     let start = { x: col, y: row }; // startingPos
     let end = {
@@ -164,7 +272,11 @@ let editorManager = (() => {
     createShips,
     rotateShips,
     updateLastClicked,
+    placeLC_Board,
     isShipPosValid, // ship position related function
+    isShipPosTaken, // ship position and board related function
+    isLastClickedPlayer,
+    getBoardShips,
     getPlayerShipsToBePlaced,
     getLastClicked,
     getLastClickedPos, // ship position related function

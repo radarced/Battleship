@@ -34,6 +34,47 @@ function mainCtrClickHandler(e) {
         eventTarget,
       );
       break;
+    case "cell":
+      // clicking on a cell we should first check whether or not the lastClicked
+      if (editorManager.getLastClicked() !== null) {
+        // there is a ship(boardShip || shipToBePlaced) which is clicked
+        // at this point we have to check whether or not the ship that is clicked belongs to the board/player that was clicked .
+        let currentCellPlayer =
+          +eventTarget.parentElement.parentElement.dataset.player; // the boardEl has the player attribute in it board - > row - > cell.
+        let isSameBoard = editorManager.isLastClickedPlayer(currentCellPlayer);
+        if (!isSameBoard) {
+          return;
+        }
+        // check whether or not the desired position is valid.
+        // if it is valid then update the lastClickedCorrespondingShip to the new location and then
+        // render both shipContainers the boardShips and shipsToBePlaced.
+        let col = +eventTarget.dataset.col;
+        let row = +eventTarget.dataset.row;
+        let shipPos = editorManager.getLastClickedPos(col, row);
+
+        if (!editorManager.isShipPosValid(shipPos)) {
+          // check if the shipPos is valid
+          return;
+        }
+        if (editorManager.isShipPosTaken(shipPos, currentCellPlayer)) {
+          return;
+        }
+        // ship can be placed on the board on this position
+        // hence we update the state and render both containers as both can be the changed state as the consequences of the ship's state manipulation.
+
+        editorManager.placeLC_Board(shipPos); // <- this sets lastclicked to null
+
+        RenderManager.renderMenuBoard(currentCellPlayer);
+        RenderManager.renderShipsContainer(
+          editorManager.getPlayerShipsToBePlaced(currentCellPlayer),
+          currentCellPlayer,
+        );
+        RenderManager.renderBoardShips(
+          editorManager.getBoardShips(currentCellPlayer),
+          currentCellPlayer,
+        );
+      }
+      break;
   }
 }
 

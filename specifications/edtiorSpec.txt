@@ -20,3 +20,7 @@ ship .
 
 in terms of rendering :
 - we have to first set the old lastClicked el back to normal in the case where a new ship was clicked .
+
+## clicking on a cell event :
+- if the lastClicked item is from the same board as the cellClicked we will change the location
+of that lastClicked ship to the new location and save that to state and render it .

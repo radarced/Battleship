@@ -91,13 +91,41 @@ let RenderManager = (() => {
   function renderMenuBoards() {
     let domRefs = UiManager.getDomRefs();
     // go through both board and reset each cell's class to default cell.water
-    renderMenuBoard(domRefs.menuBoard1);
-    renderMenuBoard(domRefs.menuBoard2);
+    renderBoard(domRefs.menuBoard1);
+    renderBoard(domRefs.menuBoard2);
   }
 
-  function renderMenuBoard(board) {
+  function renderMenuBoard(boardNum) {
+    let menuBoard = UiManager.getMenuBoard(boardNum);
+    renderBoard(menuBoard); //
+  }
+
+  function renderBoardShips(boardShips, boardNum, EL_boardShipsCtr) {
+    if (EL_boardShipsCtr === undefined) {
+      // get the board
+      EL_boardShipsCtr = UiManager.getBoardShipsCtr(boardNum);
+    }
+    EL_boardShipsCtr.innerHTML = "";
+    for (let boardShip of boardShips) {
+      EL_boardShipsCtr.appendChild(boardShip.ship.img);
+      let ship = boardShip.ship;
+      boardShip.ship.img.className = "boardShip";
+      boardShip.ship.img.style.transform = `rotate(${boardShip.ship.rotation}deg)`;
+      boardShip.ship.img.style.top = `${boardShip.shipPos.start.y * 10}%`;
+      boardShip.ship.img.style.left = `${boardShip.shipPos.start.x * 10}%`;
+      ship.img.width = 41.88 * ship.level;
+      ship.img.height = 41.88;
+    }
+  }
+
+  function renderBoard(board) {
     let boardChildren = board.children;
     for (let i = 0; i < boardChildren.length; i++) {
+      if (i === 10) {
+        // we are on the ships container inside board which basically is a container filled
+        // with absolute positioning ships and its ships so not cells hence ignore
+        continue;
+      }
       let row = boardChildren[i];
       let rowChildren = row.children;
       for (let j = 0; j < rowChildren.length; j++) {
@@ -149,6 +177,8 @@ let RenderManager = (() => {
   return {
     renderShipsContainer,
     renderMenuBoards,
+    renderMenuBoard,
+    renderBoardShips,
     renderRotateShipsContainer,
     renderLastClicked,
     renderPrecedingLastClicked,
