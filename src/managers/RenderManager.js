@@ -1,6 +1,6 @@
 import UiManager from "./UiManager.js";
 import { BOARD_SHIP, SHIP_TO_BE_PLACED } from "../modules/Enums.js";
-import { inRange } from "../modules/utils.js";
+import { inRange, sinDegrees } from "../modules/utils.js";
 // ^^ this is going to be used to access the DOM references .
 // as renderManager itself is not responsible for that it only cares about
 // taking space and converting it into a visual display for the user .
@@ -110,11 +110,12 @@ let RenderManager = (() => {
       EL_boardShipsCtr.appendChild(boardShip.ship.img);
       let ship = boardShip.ship;
       boardShip.ship.img.className = "boardShip";
-      boardShip.ship.img.style.transform = `rotate(${boardShip.ship.rotation}deg)`;
-      boardShip.ship.img.style.top = `${boardShip.shipPos.start.y * 10}%`;
+      let offsetFactor = sinDegrees(boardShip.ship.rotation); // this is basically there because rotation doesnt work seamlessly and there seems to be a 1 off problem in the y axis
+      boardShip.ship.img.style.top = `${(boardShip.shipPos.start.y - offsetFactor) * 10}%`;
       boardShip.ship.img.style.left = `${boardShip.shipPos.start.x * 10}%`;
       ship.img.width = 41.88 * ship.level;
       ship.img.height = 41.88;
+      boardShip.ship.img.style.transform = `rotate(${boardShip.ship.rotation}deg)`;
     }
   }
 

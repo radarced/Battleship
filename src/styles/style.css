@@ -60,6 +60,12 @@ h1
     max-width : 350px;
 }
 
+.shipToBePlaced
+{
+    transform-origin: 0 100%; /* makes the rotations happen around the start ( top left ) corner rather than the center of the element*/
+}
+
+
 .shipsToBePlaced.horizantal
 {
     flex-direction: row;
@@ -166,4 +172,5 @@ h1
 .boardShip 
 {
     position: absolute;
+    transform-origin: 0 100%; /* makes the rotations happen around the start ( top left ) corner rather than the center of the element*/
 }
