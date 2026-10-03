@@ -68,6 +68,25 @@ let editorManager = (() => {
       }
     }
   }
+  // get the corresponding index of lastClicked
+  // get the correspondingCtr of lastClicked
+  // take the ship from the correspondingBoardShip of lastClicked .
+  // add that ship pointer into the correspondingShipsToBePlaced Ctr
+  // remove the ship from the correspondingCtr
+  // will assume lastClicked exists
+  function placeLC_shipsCtr() {
+    let correspondingShip = getLastClickedCorrespondingShip();
+    let correspondingShipCtr = getLastClickedCorrespondingShips();
+    let correspondingShipIndex = getLastClickedCorrespondingShipIndex();
+    let correspondingShipsToBePlacedCtr = getPlayerShipsToBePlaced(
+      lastClicked.player,
+    );
+
+    let newShip = new Ship(lastClicked.level, lastClicked.player);
+    newShip.rotation = correspondingShip.rotation;
+    correspondingShipsToBePlacedCtr.push(newShip);
+    correspondingShipCtr.splice(correspondingShipIndex, 1);
+  }
 
   // LC = lastClicked;
   // this function places the lastClicked ship on the given shipPos.
@@ -75,6 +94,7 @@ let editorManager = (() => {
   // this function assumes that the given shipPos is unique relative to all the other shipPos on that menuBoard
   // this function assumes that lastClicked is not null and
   // that the boardShipPos is valid .
+  // current info : boardShipPos is being passed incorrectly inside this function
   function placeLC_Board(boardShipPos) {
     let correspondingShip = getLastClickedCorrespondingShip();
     let correspondingShipCtr = getLastClickedCorrespondingShips();
@@ -93,13 +113,57 @@ let editorManager = (() => {
         correspondingShip, // points to an object with the Ship prototype in both boardShip and shipTObePlace cases
       ),
     );
-    lastClicked = null; // because we put the lastClicked on the board.
+    console.log(menuBoardCtr);
   }
 
   // returns a boolean which represents whether or not the shipPos given intersects
   // with any of the ships that are already placed on that board
   function isShipPosTaken(shipPos, boardNum) {
     let shipCtr = getPlayerBoardShips(boardNum);
+    for (let boardShip of shipCtr) {
+      if (isShipColliding(shipPos, boardShip.shipPos)) {
+        return true;
+      }
+    }
+    // if we checked through all the ships on whether or not they were colliding with the new shipPos then that means that shipPos is placable
+    return false;
+  }
+
+  function isShipColliding(shipPos1, shipPos2) {
+    // if any of shipPos1's points are in range of shipPos2's starting x and ending x and starting y and ending y then that means that point is shared between both ships hence theyre colliding.
+    let startPos = structuredClone(shipPos1.start);
+    let startNode;
+    let endNode;
+    let increasingDecider = shipPos1.end.x - shipPos1.start.x;
+
+    if (increasingDecider > 0) {
+      // its increasing horizantally
+      startNode = shipPos1.start.x;
+      endNode = shipPos1.end.x;
+    } else {
+      // vertically and the 1x1 case is handled by itself so no worries there.
+      startNode = shipPos1.start.y;
+      endNode = shipPos1.end.y;
+    }
+
+    // we traverse from the startNode to the endNode and check if we reach a point which is shared across both ships if so then we return true.
+    for (let i = startNode; i <= endNode; i++) {
+      if (increasingDecider > 0) {
+        // its increasing horizantally
+        startPos.x = i;
+        // the other component remains constant
+      } else {
+        startPos.y = i;
+      }
+      if (
+        inRange(startPos.x, shipPos2.start.x, shipPos2.end.x) &&
+        inRange(startPos.y, shipPos2.start.y, shipPos2.end.y)
+      ) {
+        return true;
+      }
+    }
+    // meaning we traversed through entirety of ship1 but did not find a point that was being shared .
+    return false;
   }
 
   // ship position related functions
@@ -220,7 +284,8 @@ let editorManager = (() => {
       return;
     }
     let correspondingShip = getLastClickedCorrespondingShip();
-
+    console.log("lastClicked correspondingShip :", correspondingShip);
+    console.log(row, col);
     let start = { x: col, y: row }; // startingPos
     let end = {
       x:
@@ -230,8 +295,12 @@ let editorManager = (() => {
         row +
         sinDegrees(correspondingShip.rotation) * (correspondingShip.level - 1),
     };
-
     let resultantPos = new Position(start, end);
+    console.log(
+      "resultantPos from this lastClicked's correspondingShip : ",
+      correspondingShip,
+      resultantPos,
+    );
     return resultantPos;
   }
 
@@ -273,6 +342,7 @@ let editorManager = (() => {
     rotateShips,
     updateLastClicked,
     placeLC_Board,
+    placeLC_shipsCtr,
     isShipPosValid, // ship position related function
     isShipPosTaken, // ship position and board related function
     isLastClickedPlayer,

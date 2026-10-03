@@ -22,13 +22,16 @@ function mainCtrClickHandler(e) {
       }
       break;
     case "shipToBePlaced":
+    case "boardShip":
       // a ship inside the ShipsToBePlacedContainer is clicked
       RenderManager.renderPrecedingLastClicked(editorManager.getLastClicked());
 
       let level = +eventTarget.dataset.level;
       let playerNum = +eventTarget.dataset.playerNum;
+      let shipType =
+        etClassName === "shipToBePlaced" ? SHIP_TO_BE_PLACED : BOARD_SHIP;
 
-      editorManager.updateLastClicked(level, SHIP_TO_BE_PLACED, playerNum);
+      editorManager.updateLastClicked(level, shipType, playerNum);
       RenderManager.renderLastClicked(
         editorManager.getLastClicked(),
         eventTarget,
@@ -56,13 +59,20 @@ function mainCtrClickHandler(e) {
           // check if the shipPos is valid
           return;
         }
+        console.log(shipPos);
         if (editorManager.isShipPosTaken(shipPos, currentCellPlayer)) {
           return;
         }
         // ship can be placed on the board on this position
         // hence we update the state and render both containers as both can be the changed state as the consequences of the ship's state manipulation.
-
-        editorManager.placeLC_Board(shipPos); // <- this sets lastclicked to null
+        let lastClicked = editorManager.getLastClicked();
+        console.log(shipPos);
+        editorManager.placeLC_Board(shipPos);
+        editorManager.updateLastClicked(
+          lastClicked.level,
+          lastClicked.type,
+          lastClicked.player,
+        ); // sets lastClicked to null
 
         RenderManager.renderMenuBoard(currentCellPlayer);
         RenderManager.renderShipsContainer(
@@ -72,6 +82,40 @@ function mainCtrClickHandler(e) {
         RenderManager.renderBoardShips(
           editorManager.getBoardShips(currentCellPlayer),
           currentCellPlayer,
+        );
+      }
+      break;
+    case "shipsToBePlaced":
+      // if lastClicked refers to a ship on the board which is of the same playerNum of the
+      // shipsToBePlacedContainer then make the lastClicked ship back into as a shipToBePlaced and make the lastClicked refer to null as well
+      // as render the precedingLastClicked
+      if (editorManager.getLastClicked() === null) {
+        return;
+      }
+      if (editorManager.getLastClicked().type === BOARD_SHIP) {
+        let boardNum = +eventTarget.dataset.board;
+        if (!editorManager.isLastClickedPlayer(boardNum)) {
+          // if lastClicked is not on the same board as the shipsToBePlaced container is
+          return;
+        }
+        RenderManager.renderPrecedingLastClicked(
+          editorManager.getLastClicked(),
+        );
+        editorManager.placeLC_shipsCtr();
+        let lastClicked = editorManager.getLastClicked();
+        editorManager.updateLastClicked(
+          lastClicked.level,
+          lastClicked.type,
+          lastClicked.player,
+        ); // if lastClicked is not null
+        // no need to call the renderLastClicked fn() because lastClicked has already been removed from display as well as from state hence the operation was carried out and both are in sync!.
+        RenderManager.renderShipsContainer(
+          editorManager.getPlayerShipsToBePlaced(boardNum),
+          boardNum,
+        );
+        RenderManager.renderBoardShips(
+          editorManager.getBoardShips(boardNum),
+          boardNum,
         );
       }
       break;
@@ -115,8 +159,9 @@ function mainCtrMouseMoveHandler(e) {
 
   let toBePlacedShipPos = editorManager.getLastClickedPos(col, row); // going to be an object with {start : (x,y) , end : (x,y) } representing cells on the board
   editorManager.updateLastHoveredCell(); // so now the last hovered thing is a cell and tbh more appropriate its a cell which entailed the "hovering effect"
-
-  let isPosValid = editorManager.isShipPosValid(toBePlacedShipPos);
+  let isPosValid =
+    editorManager.isShipPosValid(toBePlacedShipPos) &&
+    !editorManager.isShipPosTaken(toBePlacedShipPos, playerNum);
   if (isPosValid) {
     RenderManager.renderHoveredShip(toBePlacedShipPos, "black", playerNum); // the second parameter represents the colour that should be represented in the hover effect
   } else {

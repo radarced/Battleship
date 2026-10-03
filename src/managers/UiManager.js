@@ -102,7 +102,17 @@ let UiManager = (() => {
     return children[row].children[col]; // cuz they are ordered in that same manner
   }
 
-  function getBoardShip(shipData) {}
+  function getBoardShip(shipData) {
+    let boardShipCtr = getBoardShipsCtr(shipData.player).children;
+    for (let i = 0; i < boardShipCtr.length; i++) {
+      let boardShip = boardShipCtr[i];
+      let boardShipLevel = +boardShip.dataset.level;
+      if (boardShipLevel === shipData.level) {
+        return boardShip;
+      }
+    }
+    return;
+  }
 
   return {
     InitialLoad,

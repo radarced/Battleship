@@ -22,6 +22,8 @@ let RenderManager = (() => {
       shipsEl.appendChild(ship.img);
       ship.img.className = "shipToBePlaced";
       ship.img.style.transform = `rotate(${ship.rotation}deg)`;
+      ship.img.width = ship.width;
+      ship.img.height = ship.height;
     }
   }
 
@@ -113,8 +115,12 @@ let RenderManager = (() => {
       let offsetFactor = sinDegrees(boardShip.ship.rotation); // this is basically there because rotation doesnt work seamlessly and there seems to be a 1 off problem in the y axis
       boardShip.ship.img.style.top = `${(boardShip.shipPos.start.y - offsetFactor) * 10}%`;
       boardShip.ship.img.style.left = `${boardShip.shipPos.start.x * 10}%`;
-      ship.img.width = 41.88 * ship.level;
-      ship.img.height = 41.88;
+      if (offsetFactor) {
+        ship.img.style.width = `${(boardShip.shipPos.end.y - boardShip.shipPos.start.y + 1) * 10}%`;
+      } else {
+        ship.img.style.width = `${(boardShip.shipPos.end.x - boardShip.shipPos.start.x + 1) * 10}%`;
+      }
+      ship.img.style.height = "10%";
       boardShip.ship.img.style.transform = `rotate(${boardShip.ship.rotation}deg)`;
     }
   }
