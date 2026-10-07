@@ -1,6 +1,13 @@
 import editorManager from "../managers/editorManager.js";
 import RenderManager from "../managers/RenderManager.js";
-import { BOARD_SHIP, SHIP_TO_BE_PLACED } from "../modules/Enums.js";
+import UiManager from "../managers/UiManager.js";
+import {
+  BOARD_SHIP,
+  PLAYER_1_NUM,
+  PLAYER_2_NUM,
+  SHIP_TO_BE_PLACED,
+} from "../modules/Enums.js";
+import { addGameMenuListeners } from "../modules/eventManagerDriver.js";
 
 function mainCtrClickHandler(e) {
   let eventTarget = e.target;
@@ -118,6 +125,32 @@ function mainCtrClickHandler(e) {
           boardNum,
         );
       }
+      break;
+    case "playerChooseBtn":
+      {
+        let playerNum = +eventTarget.dataset.player;
+        let chosenAgent = eventTarget.dataset.choose;
+
+        editorManager.changePlayer(chosenAgent, playerNum);
+        RenderManager.renderCompOrPlayerBtns(
+          editorManager.getChosenAgent(playerNum),
+          playerNum,
+        );
+      }
+      break;
+    case "play":
+      // switch the program State into gameState and sync all the managers up with the new game State.
+      UiManager.switchGameState();
+      UiManager.populateGameMenu();
+      RenderManager.renderBoardShips(
+        editorManager.getBoardShips(PLAYER_1_NUM),
+        PLAYER_1_NUM,
+      );
+      RenderManager.renderBoardShips(
+        editorManager.getBoardShips(PLAYER_2_NUM),
+        PLAYER_2_NUM,
+      );
+      addGameMenuListeners();
       break;
   }
 }

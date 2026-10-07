@@ -1,3 +1,10 @@
 boardShips rendering functionality . # done
 boardShip click event Handler . # done ( no rigorous reasoning for why it works  )
-shipstoBePlacedAContainer click event handler
+shipstoBePlacedAContainer click event handler # done
+player | computer button click handler  # done
+play button click handler ( this entails me having to manage multiple gameStates and architecturing 
+the Managers around dynamic game state as well )
+when the time comes where you just cant manage the handlers inside one big file then refactor
+the subHandlers into their own function. and put them somewhere else the subHandlers directory.
+
+also deduce the GameManager architecture .

@@ -1,13 +1,16 @@
 // this singleton ( an object which lives throughout ) the
-// entire program will store every state related to
-// the editor as well deal with all functionalities related
+// entire program will deal with all functionalities related
 // to the accessing , populating , deleting the elements from DOM.
-// tldr ; ^ this manager will hold the references to the ship images and deal with
-// them minus the rendering .
+import { GAME_STATES } from "../modules/Enums.js";
+import gameMenuHtml from "../views/gameMenu.js";
 
 const GRID_SIZE = 10; // its always going to be a 10x10 board.
 
 let UiManager = (() => {
+  // this object represents the element references that exist on the DOM on a specific gameState
+  let body = document.querySelector("body");
+  let gameState = GAME_STATES.EDITOR_MENU;
+
   let elementReferences = {
     mainCtr: document.querySelector(".mainContainer"),
     menuBoard1: document.querySelector("#menuBoard1"),
@@ -32,12 +35,8 @@ let UiManager = (() => {
     // adding boardShipsContainer on both boards.
     // i dont give a shit about refactoring this part just know that everything below is just
     // adding a boardShipsCtr(div) to the end of the menuBoards.
-    let boardShipsCtr1 = document.createElement("div");
-    boardShipsCtr1.className = "boardShipsCtr";
-    elementReferences.menuBoard1.appendChild(boardShipsCtr1);
-    let boardShipsCtr2 = document.createElement("div");
-    boardShipsCtr2.className = "boardShipsCtr";
-    elementReferences.menuBoard2.appendChild(boardShipsCtr2);
+    addElement("div", "boardShipsCtr", elementReferences.menuBoard1);
+    addElement("div", "boardShipsCtr", elementReferences.menuBoard2);
   }
 
   function populateMenuGrid(grid) {
@@ -56,6 +55,13 @@ let UiManager = (() => {
     }
   }
 
+  // helper method
+  function addElement(elementType, className, parentElement) {
+    let newEl = document.createElement(elementType);
+    newEl.className = className;
+    parentElement.appendChild(newEl);
+  }
+
   function populateShipsContainer(El_shipsCtr, shipsCtr) {
     // this function just creates all the ships inside the ship container
 
@@ -65,6 +71,40 @@ let UiManager = (() => {
       ship.img.className = "shipToBePlaced";
     }
   }
+
+  // this function is called when we switch from a specific gameState to a new gameState
+  // and it basically removes the elements from the DOM and removes the elements references in code .
+  function switchGameState() {
+    gameState = GAME_STATES.GAME_MENU;
+
+    body.innerHTML = "";
+    for (let menuEl in elementReferences) {
+      delete elementReferences[menuEl];
+    }
+  }
+
+  // this function populates the DOM with the gameMenu state elements and populates the references with them as well.
+  function populateGameMenu() {
+    body.insertAdjacentHTML("beforeend", gameMenuHtml);
+    populateGameMenuRefs();
+    populateMenuGrid(elementReferences.gameBoard1);
+    populateMenuGrid(elementReferences.gameBoard2);
+    addBoardShipsCtr(elementReferences.gameBoard1);
+    addBoardShipsCtr(elementReferences.gameBoard2);
+  }
+
+  function populateGameMenuRefs() {
+    elementReferences.gameBoard1 = document.querySelector(".gameBoard1");
+    elementReferences.gameBoard2 = document.querySelector(".gameBoard2");
+    elementReferences.descriptiveHeading = document.querySelector("#gmh1");
+    elementReferences.backToMenuBtn = document.querySelector(".backToMenu");
+    elementReferences.playAgainBtn = document.querySelector(".playAgain");
+  }
+
+  function addBoardShipsCtr(board) {
+    addElement("div", "boardShipsCtr", board);
+  }
+
   // getters
 
   function getDomRefs() {
@@ -92,7 +132,12 @@ let UiManager = (() => {
   }
 
   function getMenuBoard(boardNum) {
-    let boardKey = "menuBoard" + boardNum;
+    let boardPrefix = "menuBoard";
+    if (gameState === GAME_STATES.GAME_MENU) {
+      boardPrefix = "gameBoard";
+    }
+
+    let boardKey = boardPrefix + boardNum;
     return elementReferences[boardKey];
   }
 
@@ -114,14 +159,29 @@ let UiManager = (() => {
     return;
   }
 
+  function getAgentChoiceBtn(playerNum, chosenAgent) {
+    let EL_agentCtr = getMenuBoard(playerNum).parentElement.children[0];
+    for (let i = 0; i < EL_agentCtr.children.length; i++) {
+      let EL_agentBtn = EL_agentCtr.children[i];
+      let currentAgent = EL_agentBtn.dataset.choose;
+      if (currentAgent === chosenAgent) {
+        return EL_agentBtn;
+      }
+    }
+  }
+
   return {
     InitialLoad,
+    populateMenuGrid,
+    populateGameMenu,
+    switchGameState,
     getDomRefs,
     getBoardShip,
     getShipToBePlaced,
     getMenuBoard,
     getBoardShipsCtr,
     getCell,
+    getAgentChoiceBtn,
   };
 })();
 

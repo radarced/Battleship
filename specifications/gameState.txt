@@ -1,0 +1,73 @@
+so there are 4 possiblities of gameState agents .
+player vs player
+computer vs computer 
+player vs computer 
+computer vs player 
+
+## gameState Ui : 
+
+
+## Default cells visiblity : 
+both boards are going to conceal the ships meaning the ships are not going to be 
+shown in any of the possiblities of agents .
+
+## Board Styling : 
+so the cells of the board by default are going to be grey .
+missed ones will either be water or a number which represents how far away the closest
+ship is relative to that cell .
+ships that are hit are going to be an image whose z-index are going to be less than
+cells and those particular cells are just going to become non visible ( still on
+the DOM ) non visible .
+
+## State switch from gameMenu - > gameState 
+- we get the agents and their corresponding boardData from editorManager . 
+- create the new boardElements relative to the renderData of board and renderData of 
+agents .
+- append eventListeners to those board Elements .
+
+
+## base functionalities of gameState :
+
+## cell states : 
+- cell ( grey not hit )
+- ship ( ship hit )
+- water ( hit but not ship )
+- minesweeper cell ( hit with its corresponding functionality ) 
+- box ( black unable to be hit )
+
+## cell styling : 
+- cells ( default class of cell ) 
+- ship ; these will be present on the DOM as a static element just as gameMenu boards
+ship are rendered and the cell that the ship itself is on is going to be come
+non visible when that particular ship is hit .
+- another class 
+- need to append a number to that particular cell as well as make it water .
+- another class 
+
+## rendering cells
+how would the rendering function render the board relative to the passed in 
+agent's state .
+
+i think the state that will be passed to the RenderManager is going to get a bunch
+of arrays where each array represent hit ships of a specific type like 
+{hitShipCellsArr,hitMinesweeperCellsArr,boxCellsArr,waterCellsArr}
+
+
+
+## cool functionalities i would like :
+- minesweeper like cell ; refer to point number 2 of [[Board Styling]].
+- random box cells which basically are cells that show where the ships are not placed 
+; these add more information for the agent thats shooting because certain ship positions can be 
+deduced with enough cells shot alongside these boxes .
+- bombs which will eliminate a certain amount of cells around itself with its radius
+paremeter ( which for now ig would be decently light or i could make it somewhat random
+from a range of 2-5 cells < - this reveals alot because its always going to be exploded 
+in a square shape which allows u deduce that the cells that didnt explode within 
+that radius are ships ).
+
+
+
+## hard(most ambigupus) functionalities 
+these are those rwhich require me to think about new interfaces :
+- all 4 of those gameStates and how gameManager would be architectured around
+handling such possiblities .

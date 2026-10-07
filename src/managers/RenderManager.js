@@ -1,5 +1,10 @@
 import UiManager from "./UiManager.js";
-import { BOARD_SHIP, SHIP_TO_BE_PLACED } from "../modules/Enums.js";
+import {
+  BOARD_SHIP,
+  PLAYER_1_NUM,
+  PLAYER_2_NUM,
+  SHIP_TO_BE_PLACED,
+} from "../modules/Enums.js";
 import { inRange, sinDegrees } from "../modules/utils.js";
 // ^^ this is going to be used to access the DOM references .
 // as renderManager itself is not responsible for that it only cares about
@@ -181,6 +186,16 @@ let RenderManager = (() => {
     }
   }
 
+  function renderCompOrPlayerBtns(agentChoice, playerNum) {
+    let agentChoiceBtn = UiManager.getAgentChoiceBtn(playerNum, agentChoice);
+    let agentChoiceCtr = agentChoiceBtn.parentElement.children;
+    for (let i = 0; i < agentChoiceCtr.length; i++) {
+      agentChoiceCtr[i].classList.remove("clicked");
+    } // reset all clicked states
+
+    agentChoiceBtn.classList.add("clicked");
+  }
+
   return {
     renderShipsContainer,
     renderMenuBoards,
@@ -190,6 +205,7 @@ let RenderManager = (() => {
     renderLastClicked,
     renderPrecedingLastClicked,
     renderHoveredShip,
+    renderCompOrPlayerBtns,
   };
 })();
 

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>gameState html styling</title>
+    <link rel="stylesheet" href="../styles/style.css" />
+  </head>
+  <body>
+    <div class="gameMenu mainContainer">
+      <h1 id="gmh1">
+        heading element which describes whose turn it is and who wins
+      </h1>
+      <div class="boardsWrapper">
+        <div class="gameBoard1 board" data-board="1"></div>
+        <div class="gameBoard2 board" data-board="2"></div>
+      </div>
+      <div class="gameMenuInteractables">
+        <button class="playAgain interactables">Play Again</button>
+        <button class="backToMenu interactables">Back To Menu</button>
+      </div>
+    </div>
+    <script type="module" src="gameStateDriver.js"></script>
+  </body>
+</html>

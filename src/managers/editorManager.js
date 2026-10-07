@@ -39,6 +39,8 @@ let editorManager = (() => {
   let player2ShipsContainer = [];
   let menuBoardShips1 = []; // this array would hold shipPosition whose prototype will be the Position object and it basically holds the ships that have been placed on board1 or board2 correspondingly .
   let menuBoardShips2 = [];
+  let player1 = "player"; // "player" or "computer"
+  let player2 = "player";
 
   let lastClicked = null; // this represents the last clicked ship on any of the elements ( menuBoards and shipContainers )
   // ^ this will need 3 info ( playerNum , type , level )
@@ -114,6 +116,14 @@ let editorManager = (() => {
       ),
     );
     console.log(menuBoardCtr);
+  }
+
+  function changePlayer(value, playerNum) {
+    if (playerNum === PLAYER_1_NUM) {
+      player1 = value;
+    } else if (playerNum === PLAYER_2_NUM) {
+      player2 = value;
+    }
   }
 
   // returns a boolean which represents whether or not the shipPos given intersects
@@ -327,6 +337,14 @@ let editorManager = (() => {
     return lastHoveredCell;
   }
 
+  function getChosenAgent(playerNum) {
+    if (playerNum === PLAYER_1_NUM) {
+      return player1;
+    } else if (playerNum === PLAYER_2_NUM) {
+      return player2;
+    }
+  }
+
   // this will be called when the mousemove event happens over a distinct / new cell.
   function updateLastHoveredCell(col, row, playerNum) {
     lastHoveredCell = true;
@@ -343,9 +361,11 @@ let editorManager = (() => {
     updateLastClicked,
     placeLC_Board,
     placeLC_shipsCtr,
+    changePlayer,
     isShipPosValid, // ship position related function
     isShipPosTaken, // ship position and board related function
     isLastClickedPlayer,
+    getChosenAgent,
     getBoardShips,
     getPlayerShipsToBePlaced,
     getLastClicked,
