@@ -40,13 +40,17 @@ let UiManager = (() => {
   }
 
   function populateMenuGrid(grid) {
+    let cellClassName = "cell water";
+    if (gameState === GAME_STATES.GAME_MENU) {
+      cellClassName = "cell";
+    }
     for (let i = 0; i < GRID_SIZE; i++) {
       let row = document.createElement("div");
       row.className = "row";
 
       for (let j = 0; j < GRID_SIZE; j++) {
         let cell = document.createElement("div");
-        cell.className = "cell water";
+        cell.className = cellClassName;
         cell.dataset.row = i;
         cell.dataset.col = j;
         row.appendChild(cell);
@@ -94,6 +98,7 @@ let UiManager = (() => {
   }
 
   function populateGameMenuRefs() {
+    elementReferences.gameMenuCtr = document.querySelector(".gameMenu");
     elementReferences.gameBoard1 = document.querySelector(".gameBoard1");
     elementReferences.gameBoard2 = document.querySelector(".gameBoard2");
     elementReferences.descriptiveHeading = document.querySelector("#gmh1");

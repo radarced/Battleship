@@ -294,8 +294,7 @@ let editorManager = (() => {
       return;
     }
     let correspondingShip = getLastClickedCorrespondingShip();
-    console.log("lastClicked correspondingShip :", correspondingShip);
-    console.log(row, col);
+
     let start = { x: col, y: row }; // startingPos
     let end = {
       x:
@@ -306,11 +305,6 @@ let editorManager = (() => {
         sinDegrees(correspondingShip.rotation) * (correspondingShip.level - 1),
     };
     let resultantPos = new Position(start, end);
-    console.log(
-      "resultantPos from this lastClicked's correspondingShip : ",
-      correspondingShip,
-      resultantPos,
-    );
     return resultantPos;
   }
 
@@ -345,6 +339,21 @@ let editorManager = (() => {
     }
   }
 
+  function getAgentsData() {
+    return {
+      agent1: {
+        boardShips: menuBoardShips1,
+        shipsLeft: player1ShipsContainer,
+        agentType: player1,
+      },
+      agent2: {
+        boardShips: menuBoardShips2,
+        shipsLeft: player2ShipsContainer,
+        agentType: player2,
+      },
+    };
+  }
+
   // this will be called when the mousemove event happens over a distinct / new cell.
   function updateLastHoveredCell(col, row, playerNum) {
     lastHoveredCell = true;
@@ -371,6 +380,7 @@ let editorManager = (() => {
     getLastClicked,
     getLastClickedPos, // ship position related function
     getLastHoveredCell, // last hovered cell related function
+    getAgentsData, // returns all gameState data of the editorManager
     updateLastHoveredCell, // last hovered cell related function
     removeLastHoveredCell, // last hovered cell related function
   };

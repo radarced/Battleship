@@ -8,6 +8,7 @@ const PLAYER_1_NUM = 1;
 const PLAYER_2_NUM = 2; // dont really see any other place to put these guys atm
 const SHIP_TO_BE_PLACED = 1;
 const BOARD_SHIP = 2;
+const BOARD_SIZE = 10;
 const GAME_STATES = {
   EDITOR_MENU: 0,
   GAME_MENU: 1,
@@ -19,4 +20,5 @@ export {
   SHIP_TO_BE_PLACED,
   BOARD_SHIP,
   GAME_STATES,
+  BOARD_SIZE,
 };

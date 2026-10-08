@@ -1,0 +1,28 @@
+## the states variables gameManager and agents would hold :
+
+## gameManager :
+- inGame // boolean which represents whether a game is running or not.
+- winner 
+- currentTurn
+- agent1
+- agent2
+
+## Agents :
+i believe it wont be too much of a hackle to just have a single interface for both agents .
+
+each agent would hold the following state variables :
+- shipPosArray ( which holds all ship positions on that agents board ) 
+- boxPosArray ( which holds all box cell positions on that agents board )
+- mineSweeperCellsArray ( which holds all minesweeper cells positions on that agents board )
+// i'll add the bomb later if i want to .
+
+### hit cells data / state variables : 
+- hitShipCells 
+- hitMineSweeperCells 
+- hitWaterCells ( missed cells )
+
+## hit mineSweeper Cell interface :
+{
+    cellPos : Position(x,y),
+    howFarAShipIs : Z, // this property represents the mineSweeper cell functionality .
+}

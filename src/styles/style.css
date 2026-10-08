@@ -114,9 +114,14 @@ h1
 .cell
 {
     flex : 1 1 100%;
+    position: relative;
     border : 1px solid grey;
     background-color: rgb(199, 198, 198);
     aspect-ratio: 1/1;
+    /* flex declarations for "minesweeper cell styling" */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .cell.water
@@ -212,21 +217,17 @@ h1
     max-width : 800px;
     display : flex;
     gap : 12px;
-}   
-
-/* this styling allows us to do static boardShip rendering */
-.gameBoard .boardShip
-{
-    z-index : 0;
-}
-/* 
-.gameBoard .cell[data-col="2"]
-{
-    visibility:hidden;
 }
 
-
-.gameBoard .cell[data-col="3"]
+.cell.box
 {
-    visibility:hidden;
-} */
+    background-color: rgb(29, 29, 29);
+}
+
+/* when a ship has to be shown on the gameBoard that particular cell's z-index becomes auto */
+.gameBoard .cell
+{
+    z-index : auto;
+
+}
+

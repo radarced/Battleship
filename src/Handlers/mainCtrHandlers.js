@@ -1,6 +1,8 @@
 import editorManager from "../managers/editorManager.js";
 import RenderManager from "../managers/RenderManager.js";
 import UiManager from "../managers/UiManager.js";
+import GameManager from "../managers/GameManager.js";
+
 import {
   BOARD_SHIP,
   PLAYER_1_NUM,
@@ -142,15 +144,18 @@ function mainCtrClickHandler(e) {
       // switch the program State into gameState and sync all the managers up with the new game State.
       UiManager.switchGameState();
       UiManager.populateGameMenu();
+
+      addGameMenuListeners();
+      GameManager.startGame(editorManager.getAgentsData());
+      console.log(GameManager.getBoardShips(PLAYER_1_NUM));
       RenderManager.renderBoardShips(
-        editorManager.getBoardShips(PLAYER_1_NUM),
+        GameManager.getBoardShips(PLAYER_1_NUM),
         PLAYER_1_NUM,
       );
       RenderManager.renderBoardShips(
-        editorManager.getBoardShips(PLAYER_2_NUM),
+        GameManager.getBoardShips(PLAYER_2_NUM),
         PLAYER_2_NUM,
       );
-      addGameMenuListeners();
       break;
   }
 }
