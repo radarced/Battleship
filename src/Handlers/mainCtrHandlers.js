@@ -5,6 +5,7 @@ import GameManager from "../managers/GameManager.js";
 
 import {
   BOARD_SHIP,
+  GAME_STATES,
   PLAYER_1_NUM,
   PLAYER_2_NUM,
   SHIP_TO_BE_PLACED,
@@ -142,12 +143,12 @@ function mainCtrClickHandler(e) {
       break;
     case "play":
       // switch the program State into gameState and sync all the managers up with the new game State.
-      UiManager.switchGameState();
+      UiManager.switchGameState(GAME_STATES.GAME_MENU);
       UiManager.populateGameMenu();
 
       addGameMenuListeners();
       GameManager.startGame(editorManager.getAgentsData());
-      console.log(GameManager.getBoardShips(PLAYER_1_NUM));
+
       RenderManager.renderBoardShips(
         GameManager.getBoardShips(PLAYER_1_NUM),
         PLAYER_1_NUM,

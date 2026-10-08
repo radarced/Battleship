@@ -3,4 +3,8 @@ function addGameMenuListeners() {
   EventManager.attachGameMenuHandlers();
 }
 
-export { addGameMenuListeners };
+function addEditorMenuListeners() {
+  EventManager.attachInitialHandlers();
+}
+
+export { addGameMenuListeners, addEditorMenuListeners };

@@ -49,6 +49,11 @@ let editorManager = (() => {
   let lastHoveredCell = false; // this variable represents the last cell that was hovered on the board.
   // this is basically there for us to
 
+  function resetUiState() {
+    lastHoveredCell = false;
+    lastClicked = null;
+  }
+
   function createShips() {
     for (let i = 1; i <= 5; i++) {
       let ship1 = new Ship(i, PLAYER_1_NUM);
@@ -365,6 +370,7 @@ let editorManager = (() => {
   }
 
   return {
+    resetUiState,
     createShips,
     rotateShips,
     updateLastClicked,

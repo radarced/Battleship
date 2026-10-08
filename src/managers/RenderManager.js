@@ -102,9 +102,9 @@ let RenderManager = (() => {
     renderBoard(domRefs.menuBoard2);
   }
 
-  function renderMenuBoard(boardNum) {
+  function renderMenuBoard(boardNum, gameMenu = false) {
     let menuBoard = UiManager.getMenuBoard(boardNum);
-    renderBoard(menuBoard); //
+    renderBoard(menuBoard, gameMenu); //
   }
 
   function renderBoardShips(boardShips, boardNum, EL_boardShipsCtr) {
@@ -130,8 +130,12 @@ let RenderManager = (() => {
     }
   }
 
-  function renderBoard(board) {
+  function renderBoard(board, gameMenu = false) {
     let boardChildren = board.children;
+    let className = "cell water";
+    if (gameMenu) {
+      className = "cell";
+    }
     for (let i = 0; i < boardChildren.length; i++) {
       if (i === 10) {
         // we are on the ships container inside board which basically is a container filled
@@ -142,7 +146,7 @@ let RenderManager = (() => {
       let rowChildren = row.children;
       for (let j = 0; j < rowChildren.length; j++) {
         let col = rowChildren[j];
-        col.className = "cell water";
+        col.className = className;
       }
     }
   }
@@ -195,6 +199,15 @@ let RenderManager = (() => {
 
     agentChoiceBtn.classList.add("clicked");
   }
+  // GameMenu rendering below :
+
+  function renderHitCells(agentHitCells, agentNum) {
+    let board = UiManager.getMenuBoard(agentNum);
+    for (let waterCell of agentHitCells.waterCells) {
+      let cellEL = UiManager.getCell(board, waterCell.x, waterCell.y);
+      cellEL.classList.add("water");
+    }
+  }
 
   return {
     renderShipsContainer,
@@ -206,6 +219,7 @@ let RenderManager = (() => {
     renderPrecedingLastClicked,
     renderHoveredShip,
     renderCompOrPlayerBtns,
+    renderHitCells,
   };
 })();
 

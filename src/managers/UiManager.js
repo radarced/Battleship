@@ -3,6 +3,7 @@
 // to the accessing , populating , deleting the elements from DOM.
 import { GAME_STATES } from "../modules/Enums.js";
 import gameMenuHtml from "../views/gameMenu.js";
+import editorMenuHtml from "../views/editorMenu.js";
 
 const GRID_SIZE = 10; // its always going to be a 10x10 board.
 
@@ -78,8 +79,8 @@ let UiManager = (() => {
 
   // this function is called when we switch from a specific gameState to a new gameState
   // and it basically removes the elements from the DOM and removes the elements references in code .
-  function switchGameState() {
-    gameState = GAME_STATES.GAME_MENU;
+  function switchGameState(newGameState) {
+    gameState = newGameState;
 
     body.innerHTML = "";
     for (let menuEl in elementReferences) {
@@ -97,6 +98,14 @@ let UiManager = (() => {
     addBoardShipsCtr(elementReferences.gameBoard2);
   }
 
+  function populateEditorMenu() {
+    let h1 = document.createElement("h1");
+    h1.innerText = "Battleship!";
+    body.appendChild(h1);
+    body.insertAdjacentHTML("beforeend", editorMenuHtml);
+    populateEditorMenuRefs();
+  }
+
   function populateGameMenuRefs() {
     elementReferences.gameMenuCtr = document.querySelector(".gameMenu");
     elementReferences.gameBoard1 = document.querySelector(".gameBoard1");
@@ -104,6 +113,14 @@ let UiManager = (() => {
     elementReferences.descriptiveHeading = document.querySelector("#gmh1");
     elementReferences.backToMenuBtn = document.querySelector(".backToMenu");
     elementReferences.playAgainBtn = document.querySelector(".playAgain");
+  }
+
+  function populateEditorMenuRefs() {
+    elementReferences.mainCtr = document.querySelector(".mainContainer");
+    elementReferences.menuBoard1 = document.querySelector("#menuBoard1");
+    elementReferences.menuBoard2 = document.querySelector("#menuBoard2");
+    elementReferences.menuShipsContainer1 = document.querySelector("#sTBP1");
+    elementReferences.menuShipsContainer2 = document.querySelector("#sTBP2");
   }
 
   function addBoardShipsCtr(board) {
@@ -179,6 +196,7 @@ let UiManager = (() => {
     InitialLoad,
     populateMenuGrid,
     populateGameMenu,
+    populateEditorMenu,
     switchGameState,
     getDomRefs,
     getBoardShip,
