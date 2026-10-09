@@ -4,7 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "webpack"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +14,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.29.7",
     "css-loader": "^7.1.5",
+    "html-loader": "^5.1.0",
     "html-webpack-plugin": "^5.6.8",
     "jest": "^30.5.2",
     "style-loader": "^4.0.0",

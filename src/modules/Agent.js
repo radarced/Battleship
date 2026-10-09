@@ -8,7 +8,6 @@ import {
 import { CapitilizeWord, cosDegrees, sinDegrees } from "./utils.js";
 
 import { RANDOM_DEDUCTION, SHIP_DRIVEN_DEDUCTION } from "./Enums.js";
-import { Position } from "./Ship.js";
 
 // agent_data = {agentType,boardShips,shipsLeft}
 function Agent(agent_data) {
@@ -21,7 +20,6 @@ function Agent(agent_data) {
 
   // this does not track state for the sake of the game functionalities OTHER than the ai and other purposes if they ever do exist ; important point is that this is just another representation of the ships not a core state variable of Agent
   this.shipsParts = getShipParts(this.shipsPos); // shipsPart is an array / object ( i havent decided yet ) which basically represent the hitShips on the board in a representation which preserves alot of information relative to the ai algorithm.
-  console.log(this.shipsParts);
 
   this.allHitCells = {
     hitWaterCells: [],

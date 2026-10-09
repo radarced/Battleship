@@ -1,6 +1,7 @@
 import UiManager from "./managers/UiManager.js";
 import editorManager from "./managers/editorManager.js";
 import EventManager from "./managers/EventManager.js";
+import "./styles/style.css";
 
 const PLAYER_1_NUM = 1;
 const PLAYER_2_NUM = 2; // dont really see any other place to put these guys atm
