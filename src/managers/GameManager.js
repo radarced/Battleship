@@ -4,7 +4,12 @@
 // the state of the initial board will also be handled inside here .
 import Agent from "../modules/Agent.js";
 import { getEmptyBoard, removeTakenShips } from "../modules/BoardFuncs.js";
-import { PLAYER_1_NUM, PLAYER_2_NUM } from "../modules/Enums.js";
+import {
+  PLAYER_1_NUM,
+  PLAYER_2_NUM,
+  RANDOM_DEDUCTION,
+  SHIP_DRIVEN_DEDUCTION,
+} from "../modules/Enums.js";
 import { BoardShip } from "../modules/Ship.js";
 import UiManager from "./UiManager.js";
 
@@ -82,15 +87,24 @@ let GameManager = (() => {
   function computerPlayTurn() {
     // get the most plausible square to hit access that square / cell in the DOM by UIManager and then dispatch the click event on it after a setTimeout()
     let toHitAgent = getAgent(getOppositeAgent(currentTurn));
-    let allHitCells = toHitAgent.getAllHitCells();
 
-    let allPossibleCells = getEmptyBoard(); // a 2d board
-    removeTakenShips(allPossibleCells, allHitCells);
+    // deduce what is the variable according to which the algorithm should compute from
+    // - a purely random cell on the board
+    // - a cell derived from an exposed shipCell ( this condition is met when there is an exposed shipCell on that board )
+    // - a minesweeper cell driven computation .
+    // the highest precedence holder is variable no 2 then no 3 then no 1.
+    let plausibleDeducingVariable = toHitAgent.getPlausibleDeducingVar();
 
-    let randomCell = getRandomCell(allPossibleCells); // is returned in the format `${col}${row}`.
+    let functionsMap = {
+      [SHIP_DRIVEN_DEDUCTION]: pickAdjacentShipCell,
+      [RANDOM_DEDUCTION]: pickRandomCell,
+    };
+
+    let deductionFunction = functionsMap[plausibleDeducingVariable];
+    let pickedCell = deductionFunction();
 
     let board_EL = UiManager.getMenuBoard(getOppositeAgent(currentTurn));
-    let cellEL = UiManager.getCell(board_EL, +randomCell[0], +randomCell[1]);
+    let cellEL = UiManager.getCell(board_EL, +pickedCell[0], +pickedCell[1]);
 
     let clickEvent = new Event("click", { bubbles: true });
     isComputerShooting = true;
@@ -100,7 +114,7 @@ let GameManager = (() => {
         cellEL.dispatchEvent(clickEvent);
         // right before the callback has been queued we set computerShooting to false
       } // if we are NOT in game then the click event will not be dispatched hence no "inaccessible memory would be accessed"
-    }, 50);
+    }, 150);
   }
 
   function changeTurn() {
@@ -131,6 +145,20 @@ let GameManager = (() => {
     return agent.allHitCells;
   }
 
+  // all computer thinking functions :
+  function pickRandomCell() {
+    let toHitAgent = getAgent(getOppositeAgent(currentTurn));
+    let allHitCells = toHitAgent.getAllHitCells();
+    let allPossibleCells = getEmptyBoard(); // a 2d board
+    removeTakenShips(allPossibleCells, allHitCells);
+    return getRandomCell(allPossibleCells); // is returned in the format `${col}${row}`.
+  }
+
+  function pickAdjacentShipCell() {
+    let toHitAgent = getAgent(getOppositeAgent(currentTurn));
+    return toHitAgent.getPlausibleShipHitCell();
+  }
+
   function getRandomCell(board) {
     let randomRow = board[Math.floor(Math.random() * board.length)];
     let randomCell = randomRow[Math.floor(Math.random() * randomRow.length)];
@@ -159,7 +187,6 @@ let GameManager = (() => {
         shipPos.start.x === shipPos.end.x &&
         shipPos.start.y === shipPos.end.y
       ) {
-        level = 1;
         rotation = 0;
       }
 

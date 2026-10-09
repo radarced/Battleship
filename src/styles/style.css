@@ -116,7 +116,7 @@ h1
     flex : 1 1 100%;
     position: relative;
     border : 1px solid grey;
-    background-color: rgb(199, 198, 198);
+    background-color: rgba(199, 198, 198, 0.634);
     aspect-ratio: 1/1;
     /* flex declarations for "minesweeper cell styling" */
     display: flex;

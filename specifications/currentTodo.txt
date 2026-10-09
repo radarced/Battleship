@@ -8,3 +8,15 @@ when the time comes where you just cant manage the handlers inside one big file 
 the subHandlers into their own function. and put them somewhere else the subHandlers directory.
 
 also deduce the GameManager architecture .
+
+have to make the ai ship based thinking which introduces alot more ship state variables than before .
+check out the shipParts paint file for this .
+i understand the project is complete and is pretty extensible for crazier functionalities but 
+i have to call it quits as this has already taken up a week of mine .
+
+the scope of the project should not be exceeded than this :
+- hide function in editorMenu . (last task)
+- all cell functionalities .
+
+first task : make the ai think ( the minesweeper based shooting deduction  could be inferred later for now just focus on the ships as 
+no matter what these would be the fundamental deduction entailer of the computer as they hold the highest form of information )

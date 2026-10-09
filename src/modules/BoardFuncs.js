@@ -2,6 +2,50 @@ import { cosDegrees, inRange, sinDegrees } from "../modules/utils.js";
 import { Position } from "../modules/Ship.js";
 
 import { BOARD_SIZE } from "./Enums.js";
+
+// shipsPos is an array where each item represents a ship Position .
+function getShipParts(shipsPos) {
+  let shipsParts = [];
+  // each part holds these properties :
+  // {
+  //  parts : [], // these represent the parts of the ship that are hit on the board ; each part holds a partIndex which represents what position it holds relative to the ship start and end pos starting from 0 and its cellPos
+  //  level: S.E , rotation : S.E ,
+  // amountOfParts : N, // this represents how many parts have been found its equivalent to parts.length;
+  // shipCells : [], // holds all cells that the ship takes up on the board this is to access the appropriate ship when given a particular shipCell ( when u dont know what ship the cell belongs to )
+  // }
+  for (let shipPos of shipsPos) {
+    let increasingDecider = shipPos.end.x - shipPos.start.x;
+    let level;
+    let rotation;
+
+    if (increasingDecider > 0) {
+      // horizantal increase
+      level = increasingDecider + 1;
+      rotation = 0;
+    } else {
+      level = shipPos.end.y - shipPos.start.y + 1;
+      rotation = 90;
+    }
+    if (
+      shipPos.start.x === shipPos.end.x &&
+      shipPos.start.y === shipPos.end.y
+    ) {
+      rotation = 0;
+    }
+
+    let shipParts = {
+      parts: [],
+      amountOfParts: 0,
+      level: level,
+      rotation: rotation,
+      shipCells: extractShipsPos([shipPos]),
+    };
+
+    shipsParts.push(shipParts);
+  }
+  return shipsParts;
+}
+
 // it takes in the data about what ships are placed and what are not ;
 // places the ships that arent placed .
 // and accumulates an array which represents all positions of the ships on the board.
@@ -205,10 +249,11 @@ function extractShipsPos(shipsPos) {
 export {
   extractShipsPos,
   getEmptyBoard,
+  getBoardShipsPos,
+  getShipParts,
   removeTakenShips,
   deduceShipPosValidity,
   deduceShipPos,
   placeShips,
   randomizeShipRotation,
-  getBoardShipsPos,
 };
