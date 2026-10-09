@@ -104,7 +104,7 @@ let RenderManager = (() => {
 
   function renderMenuBoard(boardNum, gameMenu = false) {
     let menuBoard = UiManager.getMenuBoard(boardNum);
-    renderBoard(menuBoard, gameMenu); //
+    renderBoard(menuBoard, gameMenu);
   }
 
   function renderBoardShips(boardShips, boardNum, EL_boardShipsCtr) {
@@ -133,8 +133,10 @@ let RenderManager = (() => {
   function renderBoard(board, gameMenu = false) {
     let boardChildren = board.children;
     let className = "cell water";
+    let zIndex = "auto";
     if (gameMenu) {
       className = "cell";
+      zIndex = "1";
     }
     for (let i = 0; i < boardChildren.length; i++) {
       if (i === 10) {
@@ -147,6 +149,7 @@ let RenderManager = (() => {
       for (let j = 0; j < rowChildren.length; j++) {
         let col = rowChildren[j];
         col.className = className;
+        col.style.zIndex = zIndex; // this property is used to render ships in gameMenu so thats why it needs resetting
       }
     }
   }
@@ -203,9 +206,13 @@ let RenderManager = (() => {
 
   function renderHitCells(agentHitCells, agentNum) {
     let board = UiManager.getMenuBoard(agentNum);
-    for (let waterCell of agentHitCells.waterCells) {
+    for (let waterCell of agentHitCells.hitWaterCells) {
       let cellEL = UiManager.getCell(board, waterCell.x, waterCell.y);
       cellEL.classList.add("water");
+    }
+    for (let shipCell of agentHitCells.hitShipCells) {
+      let cellEL = UiManager.getCell(board, shipCell.x, shipCell.y);
+      cellEL.style.zIndex = "auto"; // this makes the ship show above it.
     }
   }
 

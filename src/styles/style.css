@@ -227,7 +227,6 @@ h1
 /* when a ship has to be shown on the gameBoard that particular cell's z-index becomes auto */
 .gameBoard .cell
 {
-    z-index : auto;
-
+    z-index : 1;
 }
 

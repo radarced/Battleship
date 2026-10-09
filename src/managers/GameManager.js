@@ -15,6 +15,8 @@ let GameManager = (() => {
   let agent1;
   let agent2;
 
+  let isComputerShooting = false;
+
   function startGame(agentsData) {
     inGame = true;
     agent1 = new Agent(agentsData.agent1);
@@ -41,12 +43,37 @@ let GameManager = (() => {
     if (agentNum !== getOppositeAgent(currentTurn)) {
       return; // the current Turn agent can only shoot the opposite agent not itself...
     }
+    if (isComputerShooting) {
+      // theres a bug where while the setTimeout of the computer shoot dispatch function is running the player can shoot the cells .
+      // even though this doesnt cause bugs or "state issues" its not intended so when a computer is shooting this variable will keep track of it and this way only the computer gets to shoot in its own turn.
+      return;
+    }
 
-    let shotAgent = getAgent(getOppositeAgent(currentTurn));
-    shotAgent.hitCells.push({ x: col, y: row });
+    // check whether or not the cellShot has already been hit
+    let toShootAgent = getAgent(getOppositeAgent(currentTurn));
+    let toHitCell = { x: col, y: row };
+    if (toShootAgent.isHitCell(toHitCell)) {
+      return;
+    }
 
-    // if it was ship then we would not switch turns .
-    currentTurn = getOppositeAgent(currentTurn);
+    // after these two checks we are certain that the cell the user is hitting rn is not HIT and is hitting his opponent not himself .
+    // hence you shoot the agent ( Agent.hitCell )
+    // if after shooting the cell agent has won N_hitShipCells === N_shipCells then we end game and return ;
+    // if the cell that was hit is a ship then the currentTurn wouldnt change .
+    toShootAgent.hitCell(toHitCell);
+
+    if (toShootAgent.AllShipsHit()) {
+      // the currentAgent won
+      winner = getAgent(currentTurn).agentType + currentTurn;
+      inGame = false;
+      return;
+    }
+
+    if (!toShootAgent.isHitCellType("ship", toHitCell)) {
+      // if the hitCell was not ship then we change turns.
+      changeTurn();
+    }
+    // in both cases we will check whether or not the currentAgent is computer and set a turn if it is
     if (getAgent(currentTurn).type === "computer") {
       computerPlayTurn();
     }
@@ -55,9 +82,10 @@ let GameManager = (() => {
   function computerPlayTurn() {
     // get the most plausible square to hit access that square / cell in the DOM by UIManager and then dispatch the click event on it after a setTimeout()
     let toHitAgent = getAgent(getOppositeAgent(currentTurn));
+    let allHitCells = toHitAgent.getAllHitCells();
 
     let allPossibleCells = getEmptyBoard(); // a 2d board
-    removeTakenShips(allPossibleCells, toHitAgent.hitCells);
+    removeTakenShips(allPossibleCells, allHitCells);
 
     let randomCell = getRandomCell(allPossibleCells); // is returned in the format `${col}${row}`.
 
@@ -65,11 +93,18 @@ let GameManager = (() => {
     let cellEL = UiManager.getCell(board_EL, +randomCell[0], +randomCell[1]);
 
     let clickEvent = new Event("click", { bubbles: true });
+    isComputerShooting = true;
     setTimeout(() => {
       if (inGame) {
+        isComputerShooting = false;
         cellEL.dispatchEvent(clickEvent);
+        // right before the callback has been queued we set computerShooting to false
       } // if we are NOT in game then the click event will not be dispatched hence no "inaccessible memory would be accessed"
-    }, 32);
+    }, 50);
+  }
+
+  function changeTurn() {
+    currentTurn = getOppositeAgent(currentTurn);
   }
 
   function getAgent(agentNum) {
@@ -93,9 +128,7 @@ let GameManager = (() => {
   // returns the hitCells of an agent grouped together in an object where eahc property represents distinct type of cells whom are hit
   function getAgentHitCells(agentNum) {
     let agent = getAgent(agentNum);
-    return {
-      waterCells: agent.hitCells,
-    };
+    return agent.allHitCells;
   }
 
   function getRandomCell(board) {
